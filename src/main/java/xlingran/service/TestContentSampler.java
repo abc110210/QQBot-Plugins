@@ -35,19 +35,38 @@ public class TestContentSampler {
     }
 
     public MomentExtension randomApprovedMoment() {
-        var options = ListOptions.builder()
+        var names = listApprovedMomentNames();
+        var name = pickRandom(names);
+        return momentFetcher.fetch(name)
+            .orElseThrow(() -> new IllegalStateException("无法加载瞬间: " + name));
+    }
+
+    public MomentExtension latestApprovedMoment() {
+        var sort = Sort.by(Sort.Order.desc("spec.releaseTime"));
+        var sorted = client.listAllNames(MomentExtension.class, approvedMomentOptions(), sort);
+        if (sorted.isEmpty()) {
+            throw new IllegalStateException("没有已审核的瞬间可用于测试");
+        }
+        var name = sorted.getFirst();
+        return momentFetcher.fetch(name)
+            .orElseThrow(() -> new IllegalStateException("无法加载瞬间: " + name));
+    }
+
+    private List<String> listApprovedMomentNames() {
+        var names = client.listAllNames(MomentExtension.class, approvedMomentOptions(), Sort.unsorted());
+        if (names.isEmpty()) {
+            throw new IllegalStateException("没有已审核的瞬间可用于测试");
+        }
+        return names;
+    }
+
+    private static ListOptions approvedMomentOptions() {
+        return ListOptions.builder()
             .fieldQuery(and(
                 equal("spec.approved", true),
                 equal("spec.visible", "PUBLIC")
             ))
             .build();
-        var names = client.listAllNames(MomentExtension.class, options, Sort.unsorted());
-        if (names.isEmpty()) {
-            throw new IllegalStateException("没有已审核的瞬间可用于测试");
-        }
-        var name = pickRandom(names);
-        return momentFetcher.fetch(name)
-            .orElseThrow(() -> new IllegalStateException("无法加载瞬间: " + name));
     }
 
     private static String pickRandom(List<String> names) {

@@ -3,6 +3,7 @@ package xlingran.service;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import run.halo.app.core.extension.content.Comment;
@@ -12,6 +13,7 @@ import run.halo.app.extension.ExtensionClient;
 import run.halo.app.extension.Ref;
 import xlingran.extension.MomentExtension;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ContentEventBridge {
@@ -33,6 +35,9 @@ public class ContentEventBridge {
 
     public void pushMoment(MomentExtension moment, String action) {
         var event = "moment." + action;
+        var name = moment.getMetadata().getName();
+        log.debug("Push moment event={} name={} owner={}", event, name,
+            moment.getSpec() != null ? moment.getSpec().getOwner() : "");
         var data = momentPayloadBuilder.build(moment, action);
         remotePushService.buildEnvelope(event, data)
             .flatMap(remotePushService::push)
