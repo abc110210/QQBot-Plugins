@@ -1,0 +1,5 @@
+# Requires Python >=3.10.0
+flask>=3.0.0,<4
+pyyaml>=6.0.1,<7
+requests>=2.31.0,<3
+playwright>=1.40.0,<2

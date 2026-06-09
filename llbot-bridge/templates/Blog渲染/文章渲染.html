@@ -1,0 +1,196 @@
+<div class="box">
+	<!-- 公告 -->
+	<div class="gonggao">
+		<span class="ggzt">寄寄之家Blog更新推送:</span>
+	</div>
+	<!-- 头像 -->
+	<div class="avatarimg">
+		<img class="tx" src="https://xlingran.com/upload/eb009418-dd00-4fe9-88e5-f6f0f5324cab.png?width=800">
+		<span class="name">星野</span>
+		<div class="timedata"><span class="time">2025-03-30</span></div>
+	</div>
+	<!-- 文章和摘要相关 -->
+	<div class="wzbox">
+		<span class="wzbt">群年度总结投票</span>
+		<span class="wzzy">群年度总结，群友这边请→</span>
+	</div>
+	<!-- 封面图 -->
+	<div class="zy">
+		<div class="fm"></div>
+	</div>
+	<!-- 分类和标签 -->
+	<div class="flbox">
+		<div class="fl">
+			<div class="flbj"><span class="flzt">日常</span></div>
+			<div class="flbj"><span class="flzt">精华123123</span></div>
+		</div>
+	</div>
+</div>
+<style>
+.box{
+	min-height: 360px;
+	height: auto;
+	width: 600px;
+	/* background-color: black; */
+	background: radial-gradient(circle, #fff0f6 0%, #f8c8dc 100%);
+	/* background: radial-gradient(circle at center, #f5e6ff, #d4b4e8); */
+	border-radius: 30px;
+}
+/* 公告 */
+.gonggao{
+	height: auto;
+	width: auto;
+	padding-top: 14px;
+}
+.ggzt{
+	margin-left: 30px;
+	font-size: 25px;
+	font-family: c;
+}
+/* 头像方面 */
+.avatarimg{
+	height: auto;
+	width: auto;
+	/* background-color: #fff0f6; */
+	display: flex;
+	align-items: center;
+}
+.tx{
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
+	margin-top: 10px;
+	margin-left: 30px;
+}
+.name{
+	font-size: 20px;
+	font-family: a;
+	margin-left: 20px;
+}
+.timedata{
+	flex: 1;
+	height: auto;
+	width: auto;
+	display: flex;
+	justify-content: flex-end;
+}
+.time{
+	margin-right: 50px;
+	font-size: 20px;
+	font-family: b;
+}
+/* 文章标题和摘要 */
+.wzbox{
+	height: auto;
+	width: auto;
+	padding-top: 10px;
+	display: flex;
+	flex-direction: column;
+}
+.wzbt{
+	font-size: 22px;
+	font-family: a;
+	margin-left: 10px;
+	font-weight: bold;
+}
+.wzzy{
+	font-size: 18px;
+	font-family: a;
+	margin-left: 20px;
+}
+/* 图片资源 */
+.zy{
+	margin: auto;
+	height: auto;
+	padding-top: 14px;
+	display: flex;
+	justify-content: center;
+}
+.fm{
+	min-height: 200px;
+	max-height: 380px;
+	width: 580px;
+	background: url("https://s1.imagehub.cc/images/2025/12/23/7715b28ae9db8e345fb9a62ed992a6eb.jpg");
+	background-size: cover;
+	background-position: center;
+	border-radius: 10px;
+}
+/* 分类和标签 */
+.flbox{
+	height: auto;
+	width: auto;
+	display: flex;
+	justify-content: center;
+	padding-top: 10px;
+}
+.fl{
+	margin-bottom: 15px;
+	width: 580px;
+	display: flex;
+}
+.flbj{
+	height: 40px;
+	min-width: 80px;
+	width: fit-content;
+	border-radius: 10px;
+	background-color: #6b69d6;
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	align-items: center;
+	margin-left: 10px;
+}
+.flzt{
+	font-size: 18px;
+	color: #ffffff;
+	font-family: b;
+	margin-left: 6px;
+	margin-right: 6px;
+}
+</style>
+<!-- 字体 -->
+<style>
+	@font-face {
+		font-family: a;
+		src: url(./ttf/假粉圆体-Light.ttf);
+	}
+	@font-face {
+		font-family: b;
+		src: url(./ttf/KF手写体.otf);
+	}
+	@font-face {
+		font-family: c;
+		src: url(./ttf/包图小白体.ttf);
+	}
+	@font-face {
+		font-family: d;
+		src: url(./ttf/豆豆字体.ttf);
+	}
+	@font-face {
+		font-family: e;
+		src: url(./ttf/鸿雷板书简体（测试版）.ttf);
+	}
+	@font-face {
+		font-family: f;
+		src: url(./ttf/马善政毛笔楷体.ttf);
+	}
+</style>
+<script>
+// 每次打开随机一个柔和紫色/粉色（和你页面风格100%契合）
+const colors = [
+  "#6b69d6", // 原色
+  "#df7988",
+  "#0177b8",
+  "#8ea885",
+  "#ffb900",
+  "#c475b9",
+  "#d480c1"
+];
+// 随机取色
+const labels = document.querySelectorAll(".flbj");
+// 应用到标签
+labels.forEach(label => {
+  const randomColor = colors[Math.floor(Math.random() * colors.length)];
+  label.style.backgroundColor = randomColor;
+});
+</script>

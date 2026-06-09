@@ -1,0 +1,21 @@
+routes:
+  post.published:
+    - type: group
+      id: 123456789
+      template: 文章渲染.html
+      outputMode: image
+  moment.created:
+    - type: group
+      id: 123456789
+      template: 瞬间渲染.html
+      outputMode: image
+  test.post:
+    - type: group
+      id: 123456789
+      template: 文章渲染.html
+      outputMode: image
+  test.moment:
+    - type: group
+      id: 123456789
+      template: 瞬间渲染.html
+      outputMode: image

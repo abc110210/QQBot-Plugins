@@ -1,0 +1,90 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: xlingran-shan-setting
+spec:
+  forms:
+    - group: push
+      label: 远程推送
+      formSchema:
+        - $formkit: switch
+          name: pushEnabled
+          label: 启用推送
+          value: true
+        - $formkit: url
+          name: pushScriptUrl
+          label: 脚本地址
+          help: LLBOT 服务器上的 halo-push 地址，如 https://bot.example.com/halo-push
+          validation: required
+        - $formkit: text
+          name: pushAuthToken
+          label: 鉴权 Token
+          help: 与 llbot-bridge 配置的 authToken 一致
+        - $formkit: number
+          name: pushTimeoutSeconds
+          label: 超时（秒）
+          value: 10
+    - group: events
+      label: 事件过滤
+      formSchema:
+        - $formkit: checkbox
+          name: enabledEvents
+          label: 启用的事件
+          value:
+            - post.published
+            - post.updated
+            - post.deleted
+            - moment.created
+            - moment.updated
+            - moment.deleted
+            - comment.created
+            - reply.created
+          options:
+            - label: 文章发布
+              value: post.published
+            - label: 文章更新
+              value: post.updated
+            - label: 文章删除
+              value: post.deleted
+            - label: 瞬间创建
+              value: moment.created
+            - label: 瞬间更新
+              value: moment.updated
+            - label: 瞬间删除
+              value: moment.deleted
+            - label: 新评论
+              value: comment.created
+            - label: 新回复
+              value: reply.created
+    - group: test
+      label: 测试配置
+      formSchema:
+        - $formkit: select
+          name: testTargetType
+          label: 测试目标类型
+          value: group
+          options:
+            - label: QQ 群
+              value: group
+            - label: QQ 好友
+              value: private
+        - $formkit: text
+          name: testTargetId
+          label: 测试群号 / QQ 号
+        - $formkit: select
+          name: testTemplate
+          label: 测试模板
+          value: post
+          options:
+            - label: 文章渲染
+              value: post
+            - label: 瞬间渲染
+              value: moment
+        - $formkit: text
+          name: testPushFallbackHint
+          label: 发送测试（备用入口）
+          disabled: true
+          help: >
+            插件详情页若有「发送测试」Tab 可直接点按钮；若没有，请在已登录 Console 的浏览器新标签页打开
+            /console/plugins/xlingran-shan/assets/static/test-push.html
+            （路径前缀 /console 以你的 Halo 部署为准）。

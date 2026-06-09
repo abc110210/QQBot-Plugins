@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>博客动态推送 - 测试发送</title>
+
+  <style>
+
+    body {
+
+      font-family: system-ui, -apple-system, sans-serif;
+
+      max-width: 480px;
+
+      margin: 2rem auto;
+
+      padding: 0 1rem;
+
+      color: #333;
+
+    }
+
+    h1 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+
+    p { color: #666; font-size: 0.9rem; line-height: 1.5; }
+
+    .actions { display: flex; gap: 0.75rem; margin: 1.5rem 0; flex-wrap: wrap; }
+
+    button {
+
+      padding: 0.5rem 1rem;
+
+      border: none;
+
+      border-radius: 6px;
+
+      cursor: pointer;
+
+      font-size: 0.9rem;
+
+    }
+
+    button.primary { background: #165dff; color: #fff; }
+
+    button.secondary { background: #f2f3f5; color: #333; }
+
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    #result { margin-top: 1rem; font-size: 0.9rem; }
+
+    #result.ok { color: #00b42a; }
+
+    #result.err { color: #f53f3f; }
+
+  </style>
+
+</head>
+
+<body>
+
+  <h1>发送测试卡片</h1>
+
+  <p>
+
+    请先在 Halo Console 插件「测试配置」中保存群号/QQ 号，再点击下方按钮。将从已发布内容中随机选取。
+
+  </p>
+
+  <div class="actions">
+
+    <button class="primary" id="btn-post" type="button">随机发送一篇文章</button>
+
+    <button class="secondary" id="btn-moment" type="button">随机发送一个瞬间</button>
+
+  </div>
+
+  <div id="result" role="status"></div>
+
+  <script>
+
+    const API = "/apis/console.api.xlingran-shan.halo.run/v1alpha1/test-push";
+
+    const resultEl = document.getElementById("result");
+
+
+
+    async function sendTest(templateType) {
+
+      const btnPost = document.getElementById("btn-post");
+
+      const btnMoment = document.getElementById("btn-moment");
+
+      btnPost.disabled = true;
+
+      btnMoment.disabled = true;
+
+      resultEl.className = "";
+
+      resultEl.textContent = "发送中…";
+
+      try {
+
+        const res = await fetch(API, {
+
+          method: "POST",
+
+          credentials: "include",
+
+          headers: { "Content-Type": "application/json" },
+
+          body: JSON.stringify({ templateType }),
+
+        });
+
+        const data = await res.json().catch(function () { return {}; });
+
+        if (!res.ok) {
+
+          throw new Error(data.message || res.statusText || "推送失败");
+
+        }
+
+        resultEl.className = "ok";
+
+        resultEl.textContent = "测试推送已发送，请在 QQ 查看渲染效果。";
+
+      } catch (e) {
+
+        resultEl.className = "err";
+
+        resultEl.textContent = e.message || "推送失败";
+
+      } finally {
+
+        btnPost.disabled = false;
+
+        btnMoment.disabled = false;
+
+      }
+
+    }
+
+
+
+    document.getElementById("btn-post").addEventListener("click", function () {
+
+      sendTest("post");
+
+    });
+
+    document.getElementById("btn-moment").addEventListener("click", function () {
+
+      sendTest("moment");
+
+    });
+
+  </script>
+
+</body>
+
+</html>
+
+

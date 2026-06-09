@@ -1,0 +1,14 @@
+apiVersion: v1alpha1
+kind: Role
+metadata:
+  name: xlingran-shan-role-manage-push
+  labels:
+    halo.run/role-template: "true"
+  annotations:
+    rbac.authorization.halo.run/module: "博客动态推送"
+    rbac.authorization.halo.run/display-name: "测试推送"
+    rbac.authorization.halo.run/ui-permissions: |
+      ["plugin:xlingran-shan:test-push:manage"]
+rules:
+  - nonResourceURLs: ["/apis/console.api.xlingran-shan.halo.run/v1alpha1/test-push"]
+    verbs: ["create"]

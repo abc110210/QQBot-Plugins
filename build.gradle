@@ -1,0 +1,161 @@
+plugins {
+
+    id 'java'
+
+    id 'io.freefair.lombok' version '9.2.0'
+
+    id 'run.halo.plugin.devtools' version '0.6.2'
+
+}
+
+
+
+group = 'xlingran'
+
+
+
+repositories {
+
+    maven {
+
+        name = 'Central Portal Snapshots'
+
+        url = 'https://central.sonatype.com/repository/maven-snapshots/'
+
+        content {
+
+            includeGroupAndSubgroups('run.halo')
+
+        }
+
+    }
+
+    mavenCentral()
+
+}
+
+
+
+dependencies {
+
+    implementation platform('run.halo.tools.platform:plugin:2.23.0')
+
+    compileOnly 'run.halo.app:api'
+
+
+
+    testImplementation 'run.halo.app:api'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+}
+
+
+
+test {
+
+    useJUnitPlatform()
+
+}
+
+
+
+java {
+
+    toolchain {
+
+        languageVersion = JavaLanguageVersion.of(21)
+
+    }
+
+}
+
+
+
+tasks.withType(JavaCompile).configureEach {
+
+    options.encoding = 'UTF-8'
+
+    options.release = 21
+
+}
+
+
+
+def uiDistDir = layout.projectDirectory.dir('ui/build/dist')
+
+
+
+tasks.register('processUiResources', Copy) {
+
+    from uiDistDir
+
+    into layout.buildDirectory.dir('resources/main/console')
+
+    shouldRunAfter tasks.named('processResources')
+
+    doFirst {
+
+        def mainJs = layout.projectDirectory.file('ui/build/dist/main.js').asFile
+
+        if (!mainJs.exists()) {
+
+            throw new GradleException(
+
+                'UI 构建产物缺失: ui/build/dist/main.js，请先执行 cd ui && pnpm install && pnpm build'
+
+            )
+
+        }
+
+    }
+
+}
+
+
+
+tasks.register('processUiResourcesUi', Copy) {
+
+    from uiDistDir
+
+    into layout.buildDirectory.dir('resources/main/ui')
+
+    dependsOn tasks.named('processUiResources')
+
+}
+
+
+
+tasks.named('processResources') {
+
+    dependsOn tasks.named('processUiResources'), tasks.named('processUiResourcesUi')
+
+}
+
+
+
+tasks.named('classes') {
+
+    dependsOn tasks.named('processUiResources'), tasks.named('processUiResourcesUi')
+
+}
+
+
+
+tasks.named('jar') {
+
+    dependsOn tasks.named('processUiResources'), tasks.named('processUiResourcesUi')
+
+}
+
+
+
+halo {
+
+    version = '2.23.0'
+
+}
+
+

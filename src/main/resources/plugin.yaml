@@ -1,0 +1,22 @@
+apiVersion: plugin.halo.run/v1alpha1
+kind: Plugin
+metadata:
+  name: xlingran-shan
+spec:
+  enabled: true
+  version: 1.0.9
+  requires: ">=2.23.0"
+  author:
+    name: xlingran
+    website: https://xlingran.com
+  logo: icon.png
+  homepage: https://github.com/xlingran/xlingran-shan
+  displayName: "博客动态推送"
+  description: "监听博客文章、瞬间、评论动态，HTTP 推送到 LLBOT 服务器渲染脚本"
+  license:
+    - name: "GPL-3.0"
+      url: "https://www.gnu.org/licenses/gpl-3.0.html"
+  settingName: xlingran-shan-setting
+  configMapName: xlingran-shan-configmap
+  pluginDependencies:
+    PluginMoments: "*"
