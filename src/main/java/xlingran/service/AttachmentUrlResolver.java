@@ -40,9 +40,6 @@ public class AttachmentUrlResolver {
         if (attachment.getStatus() != null && StringUtils.hasText(attachment.getStatus().getPermalink())) {
             return attachment.getStatus().getPermalink();
         }
-        if (attachment.getSpec() != null && StringUtils.hasText(attachment.getSpec().getUrl())) {
-            return attachment.getSpec().getUrl();
-        }
         return "";
     }
 
