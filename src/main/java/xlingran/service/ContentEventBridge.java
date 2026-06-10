@@ -59,6 +59,7 @@ public class ContentEventBridge {
         data.put("contentPreview", truncate(reply.getSpec().getContent()));
         data.put("owner", ownerKey(reply.getSpec().getOwner()));
         data.put("ownerDisplayName", userDisplayService.displayName(reply.getSpec().getOwner()));
+        data.put("ownerAvatar", userDisplayService.avatar(reply.getSpec().getOwner()));
         data.put("commentName", reply.getSpec().getCommentName());
         remotePushService.buildEnvelope("reply.created", data)
             .flatMap(remotePushService::push)
@@ -73,6 +74,7 @@ public class ContentEventBridge {
         data.put("contentPreview", truncate(comment.getSpec().getContent()));
         data.put("owner", ownerKey(comment.getSpec().getOwner()));
         data.put("ownerDisplayName", userDisplayService.displayName(comment.getSpec().getOwner()));
+        data.put("ownerAvatar", userDisplayService.avatar(comment.getSpec().getOwner()));
         var subjectRef = comment.getSpec().getSubjectRef();
         if (subjectRef != null) {
             data.put("subjectKind", subjectRef.getKind());
