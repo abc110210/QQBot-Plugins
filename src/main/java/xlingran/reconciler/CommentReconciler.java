@@ -1,7 +1,6 @@
 package xlingran.reconciler;
 
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import run.halo.app.core.extension.content.Comment;
@@ -10,6 +9,7 @@ import run.halo.app.extension.ExtensionUtil;
 import run.halo.app.extension.controller.Controller;
 import run.halo.app.extension.controller.ControllerBuilder;
 import run.halo.app.extension.controller.Reconciler;
+import xlingran.service.CommentReplyPushTracker;
 import xlingran.service.ContentEventBridge;
 
 @Component
@@ -20,7 +20,7 @@ public class CommentReconciler implements Reconciler<Reconciler.Request> {
 
     private final ExtensionClient client;
     private final ContentEventBridge contentEventBridge;
-    private final Set<String> pushedCreates = ConcurrentHashMap.newKeySet();
+    private final CommentReplyPushTracker commentReplyPushTracker;
 
     @Override
     public Result reconcile(Request request) {
@@ -29,7 +29,7 @@ public class CommentReconciler implements Reconciler<Reconciler.Request> {
                 if (ExtensionUtil.removeFinalizers(comment.getMetadata(), Set.of(FINALIZER))) {
                     client.update(comment);
                 }
-                pushedCreates.remove(request.name());
+                commentReplyPushTracker.forgetComment(request.name());
                 return;
             }
 
@@ -37,7 +37,8 @@ public class CommentReconciler implements Reconciler<Reconciler.Request> {
                 client.update(comment);
             }
 
-            if (pushedCreates.add(request.name())) {
+            // 仅推送启动快照之后新增的评论，历史评论不重推
+            if (commentReplyPushTracker.shouldPushComment(request.name())) {
                 contentEventBridge.pushComment(comment);
             }
         });

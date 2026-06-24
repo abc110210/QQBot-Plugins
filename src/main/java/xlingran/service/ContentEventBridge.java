@@ -66,7 +66,7 @@ public class ContentEventBridge {
             .subscribe();
     }
 
-    private Map<String, Object> buildCommentData(Comment comment, String category, String action) {
+    public Map<String, Object> buildCommentData(Comment comment, String category, String action) {
         var data = new HashMap<String, Object>();
         data.put("category", category);
         data.put("action", action);

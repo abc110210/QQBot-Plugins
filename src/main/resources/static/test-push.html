@@ -39,6 +39,7 @@
     <button class="primary" id="btn-post" type="button">随机发送一篇文章</button>
     <button class="secondary" id="btn-moment-random" type="button">随机发送一个瞬间</button>
     <button class="secondary" id="btn-moment-latest" type="button">发送最新瞬间</button>
+    <button class="secondary" id="btn-comment" type="button">随机发送一条评论</button>
   </div>
   <div id="result" role="status"></div>
   <script>
@@ -49,6 +50,7 @@
       document.getElementById("btn-post").disabled = disabled;
       document.getElementById("btn-moment-random").disabled = disabled;
       document.getElementById("btn-moment-latest").disabled = disabled;
+      document.getElementById("btn-comment").disabled = disabled;
     }
 
     function formatResult(data, templateType) {
@@ -56,6 +58,10 @@
         var preview = data.contentPreview ? "「" + data.contentPreview + "」" : "";
         var upvote = data.upvote != null ? " 👍" + data.upvote : "";
         return "已推送瞬间 " + (data.name || "") + preview + upvote + "，请在 QQ 查看渲染效果。";
+      }
+      if (templateType === "comment") {
+        var preview = data.contentPreview ? "「" + data.contentPreview + "」" : "";
+        return "已推送评论 " + (data.name || "") + preview + "，请在 QQ 查看渲染效果。";
       }
       var title = data.title ? "《" + data.title + "》" : "";
       return "已推送文章 " + (data.name || "") + title + "，请在 QQ 查看渲染效果。";
@@ -94,6 +100,9 @@
     });
     document.getElementById("btn-moment-latest").addEventListener("click", function () {
       sendTest("moment", "latest");
+    });
+    document.getElementById("btn-comment").addEventListener("click", function () {
+      sendTest("comment");
     });
   </script>
 </body>

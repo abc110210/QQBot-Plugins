@@ -13,6 +13,9 @@
       <VButton type="secondary" :loading="loadingMomentLatest" @click="sendTest('moment', 'latest')">
         发送最新瞬间
       </VButton>
+      <VButton type="secondary" :loading="loadingComment" @click="sendTest('comment')">
+        随机发送一条评论
+      </VButton>
     </VSpace>
     <p v-if="message" class="result">{{ message }}</p>
   </div>
@@ -26,15 +29,18 @@ import { Toast, VButton, VSpace } from "@halo-dev/components";
 const loadingPost = ref(false);
 const loadingMomentRandom = ref(false);
 const loadingMomentLatest = ref(false);
+const loadingComment = ref(false);
 const message = ref("");
 
-async function sendTest(templateType: "post" | "moment", mode?: "random" | "latest") {
+async function sendTest(templateType: "post" | "moment" | "comment", mode?: "random" | "latest") {
   const loading =
     templateType === "post"
       ? loadingPost
-      : mode === "latest"
-        ? loadingMomentLatest
-        : loadingMomentRandom;
+      : templateType === "comment"
+        ? loadingComment
+        : mode === "latest"
+          ? loadingMomentLatest
+          : loadingMomentRandom;
   loading.value = true;
   message.value = "";
   try {
@@ -46,6 +52,9 @@ async function sendTest(templateType: "post" | "moment", mode?: "random" | "late
       const preview = data.contentPreview ? `「${data.contentPreview}」` : "";
       const upvote = data.upvote != null ? ` 👍${data.upvote}` : "";
       message.value = `已推送瞬间 ${data.name ?? ""}${preview}${upvote}，请在 QQ 查看渲染效果。`;
+    } else if (templateType === "comment") {
+      const preview = data.contentPreview ? `「${data.contentPreview}」` : "";
+      message.value = `已推送评论 ${data.name ?? ""}${preview}，请在 QQ 查看渲染效果。`;
     } else {
       const title = data.title ? `《${data.title}》` : "";
       message.value = `已推送文章 ${data.name ?? ""}${title}，请在 QQ 查看渲染效果。`;

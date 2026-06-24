@@ -5,6 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import run.halo.app.core.extension.content.Comment;
 import run.halo.app.core.extension.content.Post;
 import run.halo.app.extension.ExtensionClient;
 import run.halo.app.extension.ListOptions;
@@ -50,6 +51,19 @@ public class TestContentSampler {
         var name = sorted.getFirst();
         return momentFetcher.fetch(name)
             .orElseThrow(() -> new IllegalStateException("无法加载瞬间: " + name));
+    }
+
+    public Comment randomApprovedComment() {
+        var options = ListOptions.builder()
+            .fieldQuery(equal("spec.approved", true))
+            .build();
+        var names = client.listAllNames(Comment.class, options, Sort.unsorted());
+        if (names.isEmpty()) {
+            throw new IllegalStateException("没有已审核的评论可用于测试");
+        }
+        var name = pickRandom(names);
+        return client.fetch(Comment.class, name)
+            .orElseThrow(() -> new IllegalStateException("无法加载评论: " + name));
     }
 
     private List<String> listApprovedMomentNames() {

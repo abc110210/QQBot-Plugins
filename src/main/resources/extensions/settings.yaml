@@ -80,6 +80,8 @@ spec:
               value: post
             - label: 瞬间渲染
               value: moment
+            - label: 评论渲染
+              value: comment
         - $formkit: text
           name: testPushFallbackHint
           label: 发送测试（备用入口）
